@@ -31,11 +31,6 @@
    -->
 
   <!-- Launch TF -->
-<!--
-   TODO- Task 1= You need to create a static transformation between /odom and /world so they are the same. You can look at the below line to see an example.
-   -->
-    <!--
   <node pkg="tf" type="static_transform_publisher" name="StaticTransformation" args="0 0 0 0 0 0 /odom /world 100"/>
--->
 
 </launch>

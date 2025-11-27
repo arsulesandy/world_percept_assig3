@@ -11,6 +11,7 @@
 #include <world_percept_assig3/SetInitTiagoPose.h>
 
 #include <cctype> //library needed for the toupper function
+#include <cmath>
 
 class WorldInfo
 {
@@ -120,22 +121,17 @@ private:
         // if the obj is not in the list add it and send it to the srv
 
         // Get object pose
-        //TODO: Identify the right variable that contains the correct object pose
-        geometry_msgs::Pose obj_pose= geometry_msgs::Pose();
+        geometry_msgs::Pose obj_pose = msg->pose.at(i);
 
         // get distance from tiago to obj[i]
-        //TODO: obtain the dx distance between the robot and the objects
-        double dx= 0;
-        //TODO: obtain the dy distance between the robot and the objects
-        double dy=0;
-        //TODO: compute the distance between the tiago and the objects
-        double d=0;
+        double dx = tiago_pose.position.x - obj_pose.position.x;
+        double dy = tiago_pose.position.y - obj_pose.position.y;
+        double d = std::sqrt(dx*dx + dy*dy);
 
         //IF the robot is closer to the seen objects, then request the service
         if (d<1.1)
         {
-            //TODO: Identify the object seen
-            std::string s= "something";
+            std::string s = msg->name.at(i);
             // Search for the obj name in the seen_list
             auto it = std::find(v_seen_obj_.begin(), v_seen_obj_.end(), s);
 
@@ -144,10 +140,8 @@ private:
 
                 world_percept_assig3::UpdateObjectList srv;
 
-                //TODO: send the new seen object to the service
-                srv.request.object_name="object";
-                //TODO: send the pose of the seen object to the service
-                srv.request.object_pose= geometry_msgs::Pose();
+                srv.request.object_name = s;
+                srv.request.object_pose = obj_pose;
 
                 if (client_map_generator_.call(srv))
                 {

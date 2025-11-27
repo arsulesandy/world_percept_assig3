@@ -50,10 +50,16 @@ private:
         ROS_INFO_STREAM("Got new object: " << req.object_name);
         std::string object;
         
-        //TODO: A2.T03: Modify this callback function to first verify that the seen object has a class, then the seen object can be asserted into the knowledge base. The response of this function is true if the assertion of knowledge is succesful.
-
         object=req.object_name;
         res.confirmation = false;
+
+        getClass(object);
+
+        if(assertKnowledge(object))
+        {
+            res.confirmation = true;
+            ++ID_;
+        }
 
 
         return res.confirmation;
@@ -63,21 +69,18 @@ private:
     void getClass(std::string className)
     {
         
-        // A2.T03:Save the query you want to ask Prolog into the variable "query", this variable is the prolog predicate that we define in the file "instance_utils" 
-        std:string query= "query";
+        std::string query = "get_class('" + className + "').";
 
         ROS_INFO_STREAM("query: "<<query);
 
         PrologQuery bdgs = pl_.query(query);
 
-        bool res = false;
-        for (auto &it : bdgs) 
+        for (PrologQuery::iterator it = bdgs.begin(); it != bdgs.end(); ++it) 
         {
-            res = true;
-            ROS_INFO_STREAM("A new class was created in the ontology");
             break;
         }
 
+        bdgs.finish();
        
     }
 
@@ -85,27 +88,28 @@ private:
     {
         std::string instanceName;
 
-        // A2.T03: Save the query you want to ask Prolog into the variable "query", this variable is the prolog predicate that we define in the file "instance_utils"
-        std:string query= "query";
+        std::string query = "create_instance_from_class('" + className + "', " + std::to_string(ID_) + ", Instance).";
 
         ROS_INFO_STREAM("query: "<<query);
 
         PrologQuery bdgs = pl_.query(query);
 
-        for(PrologQuery::iterator it=bdgs.begin(); it != bdgs.end(); it++)
+        bool result = false;
+        for(PrologQuery::iterator it=bdgs.begin(); it != bdgs.end(); ++it)
         {
-            for (auto val : *it)
-            {
-                //A2.T03: Retrive the value from Prolog
-                instanceName = "object";
-                ROS_WARN_STREAM("new instance in knowledge base: "<<instanceName);
-            }
-            
+            result = true;
+            break;
         }
 
         bdgs.finish();
+
+        if(result)
+        {
+            instanceName = "http://www.chalmers.se/ontologies/ssy236Ontology.owl#" + className + "_" + std::to_string(ID_);
+            ROS_WARN_STREAM("new instance in knowledge base: "<<instanceName);
+        }
         
-        return true;
+        return result;
     }
 
 }; //class Reasoner

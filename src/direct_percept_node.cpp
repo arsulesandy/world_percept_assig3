@@ -62,9 +62,8 @@ private:
         // TF object to populate our TF message
         tf2::Transform tf;
 
-        //TODO: set the correct origin and rotation of the variable tf. You need to modify the next two lines, the current values are incorrect, fix them with the correct values!
-        tf.setOrigin(tf2::Vector3(0, 0, 0));
-        tf.setRotation(tf2::Quaternion(0,0,0,1));
+        tf.setOrigin(tf2::Vector3(pose.position.x, pose.position.y, pose.position.z));
+        tf.setRotation(tf2::Quaternion(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w));
 
         // Transform the TF object to TF message
         ts.transform = tf2::toMsg(tf);
