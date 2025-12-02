@@ -1,3 +1,10 @@
+
+
+Group Members: Group 29
+- Student 1: Sandeep Arsule
+- Student 2: Harshith Pidur Kuppusamy
+
+
 Build the Workspace
 
 Inside the container:
@@ -78,7 +85,7 @@ false.
 true.
 
 
-
+in the above step 2 false, means class already exists in ontology and true means we created new class i.e. Statement - New class created: TestClass
 
 Verify Task 3 – Reasoning Node + Service
 
@@ -93,3 +100,11 @@ root@0d5ad4754c10:/home/user/exchange/ssy236_arsule# rosservice call /assert_kno
 > object_name: 'Beer'"
 
 confirmation: True
+
+
+
+Group of Two Students:
+- Sandeep Arsule
+- Harshith Pidur Kuppusamy
+
+
