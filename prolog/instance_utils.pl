@@ -95,12 +95,12 @@ getClassPath(Class, Class_path):-
 
 % TODO: A3.T02, properly define this predicate to check if  class already exists in the ontology ssy236Ontology. If the class does not exist, we need to assert a new one, otherwise nothing will happen.
 get_class(Class):-
-	getClassPath(Class, Class_path),
-	(   rdf(Class_path, rdf:type, owl:'Class')
-	->  true
-	;   rdf_assert(Class_path, rdf:type, owl:'Class'),
-	    rdf_global_id(ssy236Ontology:SpatialThing, SuperClass),
-	    rdf_assert(Class_path, rdfs:subClassOf, SuperClass),
-	    format('New class created: ~w~n', [Class])
-	).
+    getClassPath(Class, Class_path),
+    (   rdf(Class_path, rdf:type, owl:'Class')
+    ->  false                     % class already exists, do nothing
+    ;   rdf_assert(Class_path, rdf:type, owl:'Class'),
+        rdf_global_id(ssy236Ontology:'SpatialThing', SuperClass),
+        rdf_assert(Class_path, rdfs:subClassOf, SuperClass),
+        format('New class created: ~w~n', [Class])
+    ).
 

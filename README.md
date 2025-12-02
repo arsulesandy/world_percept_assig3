@@ -1,35 +1,95 @@
-# world_percept_assig2
+Build the Workspace
 
-Please provide a ReadMe file with the instructions you use to run your solutions
+Inside the container:
 
-For example:
+source /knowrob_ws/devel/setup.bash
+catkin_make
+source devel/setup.bash
 
-To run this package, do:
 
-First indicate where the new gazebo world is located:
 
-In the docker container do:
+Run the Simulation
 
-`export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/user/exchange/ssy236_karinne/src/world_percept_assig/  `
+source /tiago_public_ws/devel/setup.bash
+roslaunch tiago_gazebo tiago_gazebo.launch public_sim:=true world:=simple_office_with_people gui:=false
 
-`source /home/user/exchange/ssy236_karinne/devel/setup.bash`
 
-`roslaunch world_percept_assig gazebo_ssy236.launch`
 
-Task 1:
+Run the Reasoning System
 
-Run the XXX node
+docker exec -it -w /home/user/exchange/ssy236_arsule tiago bash
+source /knowrob_ws/devel/setup.bash
+source devel/setup.bash
+roslaunch world_percept_assig3 reasoning.launch
 
-`rosrun world_percept_assig2 XX_node`
 
-Task 2:
 
-Run the client node
+Verify Task 1 – Ontology Classes
 
-`rosrun world_percept_assigs percept_node`
+rosrun rosprolog rosprolog world_percept_assig3
 
-Task 3:
+?- owl_subclass_of(ssy236Ontology:'Table', _).
+true .
 
-Launch the service node
+?- owl_subclass_of(ssy236Ontology:'Table', _).
+true .
 
-`roslaunch world_percept_assig2 XXX_node`
+?- owl_subclass_of(ssy236Ontology:'Table', _).
+true .
+
+?- owl_subclass_of(ssy236Ontology:'Trash_bin', _).
+true .
+
+?- owl_subclass_of(ssy236Ontology:'Floor', _).
+true .
+
+?- owl_subclass_of(ssy236Ontology:'Cereal', _).
+true
+
+
+Removed classes (explicit triple check):
+
+
+?- rdf(ssy236Ontology:'Bookshelf', rdf:type, owl:'Class').
+false.
+
+?- rdf(ssy236Ontology:'Bowl', rdf:type, owl:'Class').
+false.
+
+?- rdf(ssy236Ontology:'Coke_can', rdf:type, owl:'Class').
+false.
+
+?- rdf(ssy236Ontology:'TestClass', rdf:type, owl:'Class').
+false.
+
+
+
+
+Verify Task 2 – Prolog get_class/1
+
+?- get_class('TestClass').
+New class created: TestClass
+true.
+
+?- get_class('TestClass').
+false.
+
+?- rdf(ssy236Ontology:'TestClass', rdf:type, owl:'Class').
+true.
+
+
+
+
+Verify Task 3 – Reasoning Node + Service
+
+root@0d5ad4754c10:/home/user/exchange/ssy236_arsule# rosservice list | grep assert
+/assert_knowledge
+
+Call the service:
+
+root@0d5ad4754c10:/home/user/exchange/ssy236_arsule# rosservice call /assert_knowledge "object_pose:
+>   position: {x: 1.0, y: 1.0, z: 0.5}
+>   orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}
+> object_name: 'Beer'"
+
+confirmation: True

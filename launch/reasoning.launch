@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <launch>
 
- <!-- rosprolog for storing & providing ontology services -->
+  <!-- rosprolog for storing & providing ontology services -->
   <param name="initial_package" type="string" value="world_percept_assig3" />
   <node name="rosprolog" pkg="rosprolog" type="rosprolog_node" output="screen"/>
+
+  <!-- Task 3: reasoning_node -->
+  <node name="reasoning_node" pkg="world_percept_assig3" type="reasoning_node" output="screen" />
 
 </launch>

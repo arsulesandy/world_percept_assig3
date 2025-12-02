@@ -66,6 +66,7 @@ add_service_files(
   FILES
   UpdateObjectList.srv
   SetInitTiagoPose.srv
+  direct_pose_srv.srv
 )
 
 ## Generate actions in the 'action' folder

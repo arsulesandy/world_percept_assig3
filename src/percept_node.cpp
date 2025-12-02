@@ -188,10 +188,10 @@ private:
     }//for msg size
 
     //If you want to print the objects that the robot has seen so far, just uncomment the for 
-    //for (size_t i = 2; i < v_seen_obj_.size(); i++)
-    // {
-    //     ROS_INFO_STREAM("["<<i<<"]: "<<v_seen_obj_.at(i));
-    // }
+    for (size_t i = 2; i < v_seen_obj_.size(); i++)
+    {
+        ROS_INFO_STREAM("["<<i<<"]: "<<v_seen_obj_.at(i));
+    }
     
   } // callback
 
